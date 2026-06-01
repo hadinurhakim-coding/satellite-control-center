@@ -1,0 +1,22 @@
+cat > .gitignore << 'EOF'
+# Virtual environment
+venv/
+
+# ChromaDB persistent data
+chroma_data/
+
+# Log dan data runtime
+logs/
+*.log
+
+# Binary hasil build
+iot-simulator/simulator
+
+# IDE
+.vscode/
+.idea/
+
+# Python cache
+__pycache__/
+*.pyc
+EOF
