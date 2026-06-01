@@ -1,22 +1,55 @@
-cat > .gitignore << 'EOF'
-# Virtual environment
-venv/
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
 
-# ChromaDB persistent data
+# --- Virtual environment ---
+venv/
+env/
+.venv/
+ENV/
+
+# --- Go ---
+iot-simulator/simulator
+*.exe
+*.test
+*.out
+
+# --- ChromaDB persistent data ---
 chroma_data/
 
-# Log dan data runtime
+# --- Log dan data runtime ---
 logs/
 *.log
 
-# Binary hasil build
-iot-simulator/simulator
-
-# IDE
+# --- IDE / Editor ---
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
 
-# Python cache
-__pycache__/
-*.pyc
-EOF
+# --- OS files ---
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- Security / Secrets ---
+.env
+.env.*
+.env.local
+*.key
+*.pem
+*.crt
+*.p12
+*.secret
+credentials
+secrets
