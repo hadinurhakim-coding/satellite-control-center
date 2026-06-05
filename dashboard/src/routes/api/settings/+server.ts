@@ -8,7 +8,7 @@ export const POST: RequestHandler = async ({ request }) => {
     apiKey: String(body.apiKey ?? ''),
     model: String(body.model ?? 'gemini-2.5-flash'),
     temperature: Number(body.temperature ?? 0.2),
-    maxOutputTokens: Number(body.maxOutputTokens ?? 512)
+    maxOutputTokens: Number(body.maxOutputTokens ?? 1024)
   });
 
   return json(status);

@@ -5,7 +5,7 @@
   let apiKey = '';
   let model = 'gemini-2.5-flash';
   let temperature = 0.2;
-  let maxOutputTokens = 512;
+  let maxOutputTokens = 1024;
   let status: SettingsStatus | null = null;
   let message = '';
   let saving = false;

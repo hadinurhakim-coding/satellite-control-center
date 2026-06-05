@@ -103,6 +103,7 @@ func main() {
 	// Channel untuk sinyal shutdown
 	sigCh := make(chan os.Signal, 1)
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
+	done := make(chan struct{})
 
 	// WaitGroup untuk goroutine satelit
 	var wg sync.WaitGroup
@@ -118,7 +119,7 @@ func main() {
 
 			for {
 				select {
-				case <-sigCh:
+				case <-done:
 					return
 				default:
 					// Buat data acak realistis
@@ -156,7 +157,11 @@ func main() {
 
 					// Interval acak antara 3-5 detik
 					sleepTime := time.Duration(minInterval+rng.Intn(maxInterval-minInterval+1)) * time.Second
-					time.Sleep(sleepTime)
+					select {
+					case <-done:
+						return
+					case <-time.After(sleepTime):
+					}
 				}
 			}
 		}(satID)
@@ -165,8 +170,7 @@ func main() {
 	// Tunggu sinyal shutdown
 	<-sigCh
 	fmt.Println("\nShutting down simulator...")
-	// Kirim sinyal ke semua goroutine (tidak langsung berhenti, mereka akan selesai di loop berikutnya)
-	close(sigCh)
+	close(done)
 	wg.Wait()
 	fmt.Println("All satellites stopped.")
 }

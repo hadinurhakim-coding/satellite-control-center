@@ -1,15 +1,18 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import type { DiagnosisResult, SettingsStatus, TelemetryPoint } from '$lib/types';
+  import type { DiagnosisResult, SettingsStatus, SimulatorStatus, TelemetryPoint } from '$lib/types';
 
   let satellites: TelemetryPoint[] = [];
   let recent: TelemetryPoint[] = [];
   let settings: SettingsStatus | null = null;
+  let simulator: SimulatorStatus | null = null;
   let loading = true;
   let question = '';
   let diagnosis: DiagnosisResult | null = null;
   let diagnosisError = '';
   let diagnosing = false;
+  let simulatorBusy = false;
+  let simulatorError = '';
   let selectedMetric: keyof Pick<
     TelemetryPoint,
     'temperature' | 'power' | 'altitude' | 'signal_strength'
@@ -36,15 +39,34 @@
   });
 
   async function refresh() {
-    const [telemetryResponse, settingsResponse] = await Promise.all([
+    const [telemetryResponse, settingsResponse, simulatorResponse] = await Promise.all([
       fetch('/api/telemetry/latest'),
-      fetch('/api/settings/status')
+      fetch('/api/settings/status'),
+      fetch('/api/simulator/status')
     ]);
     const telemetryPayload = await telemetryResponse.json();
     satellites = telemetryPayload.satellites ?? [];
     recent = telemetryPayload.recent ?? [];
     settings = await settingsResponse.json();
+    simulator = await simulatorResponse.json();
     loading = false;
+  }
+
+  async function controlSimulator(action: 'start' | 'stop') {
+    simulatorBusy = true;
+    simulatorError = '';
+
+    const response = await fetch(`/api/simulator/${action}`, { method: 'POST' });
+    const payload = await response.json();
+    simulatorBusy = false;
+
+    if (!response.ok) {
+      simulatorError = payload.message ?? `Failed to ${action} simulator.`;
+      return;
+    }
+
+    simulator = payload;
+    await refresh();
   }
 
   async function runDiagnosis() {
@@ -119,6 +141,30 @@
       <span>Fleet</span>
       <strong>{satellites.length || 0} satellites</strong>
       <small>{loading ? 'Loading telemetry' : 'Live from simulator JSON'}</small>
+    </div>
+    <div class="panel metric-panel control-panel">
+      <span>IoT Simulator</span>
+      <strong>{simulator?.running ? 'Running' : 'Stopped'}</strong>
+      <small>{simulator?.pid ? `PID ${simulator.pid}` : simulator?.message || 'Server-side control'}</small>
+      <div class="control-row">
+        <button
+          class="secondary"
+          on:click={() => controlSimulator('start')}
+          disabled={simulatorBusy || simulator?.running}
+        >
+          Start
+        </button>
+        <button
+          class="danger"
+          on:click={() => controlSimulator('stop')}
+          disabled={simulatorBusy || !simulator?.running}
+        >
+          Stop
+        </button>
+      </div>
+      {#if simulatorError}
+        <small class="inline-error">{simulatorError}</small>
+      {/if}
     </div>
     <div class="panel metric-panel">
       <span>Gemini</span>

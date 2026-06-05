@@ -29,6 +29,8 @@ npm run dev
 
 Open the SvelteKit URL shown in the terminal, usually `http://localhost:5173`.
 
+The dashboard includes Start and Stop buttons for the Go IoT simulator. You can still run the simulator manually if you prefer.
+
 ## Configure Gemini
 
 1. Open `/settings` in the dashboard.
@@ -45,3 +47,6 @@ The API key is stored server-side in `dashboard/.runtime/settings.json`, which i
 - `GET /api/settings/status`
 - `POST /api/settings`
 - `POST /api/diagnosis`
+- `GET /api/simulator/status`
+- `POST /api/simulator/start`
+- `POST /api/simulator/stop`

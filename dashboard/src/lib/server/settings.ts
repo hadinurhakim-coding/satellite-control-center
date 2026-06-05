@@ -5,7 +5,7 @@ import type { GeminiSettings, SettingsStatus } from '$lib/types';
 const defaults = {
   model: 'gemini-2.5-flash',
   temperature: 0.2,
-  maxOutputTokens: 512
+  maxOutputTokens: 1024
 };
 
 const deprecatedModels = new Set(['gemini-1.5-flash']);

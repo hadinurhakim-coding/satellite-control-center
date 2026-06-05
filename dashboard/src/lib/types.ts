@@ -28,3 +28,10 @@ export type DiagnosisResult = {
   recommendedActions: string[];
   model: string;
 };
+
+export type SimulatorStatus = {
+  running: boolean;
+  pid: number | null;
+  startedAt: string | null;
+  message: string;
+};

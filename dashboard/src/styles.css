@@ -89,7 +89,7 @@ nav {
 
 .status-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
   margin-bottom: 14px;
 }
@@ -171,6 +171,26 @@ button:disabled {
 .secondary {
   background: #e8f0f3;
   color: #153239;
+}
+
+.danger {
+  background: #ffe4e7;
+  color: #982034;
+}
+
+.control-panel {
+  align-content: start;
+}
+
+.control-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.inline-error {
+  color: #982034;
 }
 
 .chart {
