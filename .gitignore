@@ -28,6 +28,7 @@ chroma_data/
 # --- Log dan data runtime ---
 logs/
 *.log
+dashboard/.runtime/
 
 # --- IDE / Editor ---
 .vscode/
@@ -53,3 +54,10 @@ Desktop.ini
 *.secret
 credentials
 secrets
+
+# --- Node / SvelteKit ---
+node_modules/
+.svelte-kit/
+dashboard/node_modules/
+dashboard/.svelte-kit/
+dashboard/build/
